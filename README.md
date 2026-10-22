@@ -135,6 +135,7 @@ Beim Aufbau sind folgende Auffälligkeiten aufgetreten. Die Pipeline behandelt s
 | Zeitstempel mal mit, mal ohne Millisekunden | Parsing als ISO 8601, per Test abgesichert |
 | Bei manchen Toren fehlen Torschütze und Minute | Bleiben `NULL`; Abgleich Torliste vs. Endergebnis in Check 6 |
 | In der Liga-Datei der Saison 2024 kommt der MSV nicht vor | Saison wird geladen, taucht in MSV-Auswertungen nicht auf |
+| Torlisten unvollständig, bei vielen Toren fehlt die Minute | Auswertung der Torminuten nur für Tore mit bekannter Minute; die Karte „Tore ohne Minute“ zeigt den Anteil |
 
 ## Ergebnisse
 
