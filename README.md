@@ -131,6 +131,7 @@ Beim Aufbau sind folgende Auffälligkeiten aufgetreten. Die Pipeline behandelt s
 | Platzhalter-Spiel ohne echte Teams (`team_id = 0`, kein Name, Datum außerhalb der Saison) | Wird durch `stg.v_match_valid` abgelehnt, bleibt im Staging sichtbar (Check 4) |
 | Saison 2022 enthält nur 211 statt 380 Spielen (davon 210 gültig) | `season_status = 'unvollständig'` in `dim_season` |
 | Die Quelle liefert keine Zuschauerzahlen (`numberOfViewers` durchgehend leer) | Keine Zuschauer-Auswertung; Spalte bleibt im Staging für spätere Quellen |
+| Reihenfolge von Halbzeit- und Endergebnis wechselt zwischen Saisons | Zuordnung über `resultTypeID` statt über die Reihenfolge, per Test abgesichert |
 | Zeitstempel mal mit, mal ohne Millisekunden | Parsing als ISO 8601, per Test abgesichert |
 | Bei manchen Toren fehlen Torschütze und Minute | Bleiben `NULL`; Abgleich Torliste vs. Endergebnis in Check 6 |
 | In der Liga-Datei der Saison 2024 kommt der MSV nicht vor | Saison wird geladen, taucht in MSV-Auswertungen nicht auf |

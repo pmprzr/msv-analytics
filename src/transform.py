@@ -32,10 +32,13 @@ _GOAL_INT_COLUMNS = [
 def result_points(match: dict) -> tuple:
     """Halbzeit- und Endstand (jeweils Team 1, Team 2). Fehlt ein Wert, ist er None."""
     results = match.get("matchResults") or []
+
+    # Zuordnung ueber resultTypeID (1 = Halbzeit, 2 = Endergebnis nach 90 Minuten).
+    # NICHT ueber resultOrderID: aeltere Saisons liefern das Endergebnis mit Order 1
+    # und die Halbzeit mit Order 2, neuere Saisons umgekehrt.
     half = next((r for r in results if r.get("resultTypeID") == 1), None)
-    final = max(results, key=lambda r: r["resultOrderID"]) if results else None
-    if final is not None and final.get("resultTypeID") == 1:
-        final = None  # es gibt nur die Halbzeit, das Spiel ist noch nicht beendet
+    final = next((r for r in results if r.get("resultTypeID") == 2), None)
+    
     return (
         half["pointsTeam1"] if half else None,
         half["pointsTeam2"] if half else None,
