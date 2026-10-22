@@ -1,0 +1,17 @@
+# Geheimnisse - niemals committen
+.env
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Rohdaten der API (lassen sich jederzeit neu laden: python src/extract.py)
+data/raw/
+
+# Betriebssystem / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
