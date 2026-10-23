@@ -103,6 +103,7 @@ msv-analytics/
 ├── README.md
 ├── docker-compose.yml        SQL Server 2022 (Developer Edition) in Docker
 ├── requirements.txt          Python-Pakete
+├── pytest.ini                pytest-Konfiguration
 ├── .env.example              Vorlage für Zugangsdaten (.env ist nicht im Repo)
 ├── src/
 │   ├── pipeline.py           startet alles in der richtigen Reihenfolge
@@ -118,7 +119,8 @@ msv-analytics/
 │   ├── 03_views.sql             Tabelle, Form und Tabellenplatz je Spieltag (Window Functions)
 │   └── 04_checks.sql            Datenqualität und Abstimmung
 ├── tests/                    pytest für die Transformationslogik
-├── dashboard/                Power-BI-Datei und Screenshots
+├── dashboard/                Power-BI-Datei (.pbix), Theme, Screenshots, PDF-Exporte je Saison
+├── LICENSE                   MIT-Lizenz
 └── data/raw/                 API-Rohdaten (nicht im Repo, werden erzeugt)
 ```
 
@@ -134,22 +136,37 @@ Beim Aufbau sind folgende Auffälligkeiten aufgetreten. Die Pipeline behandelt s
 | Reihenfolge von Halbzeit- und Endergebnis wechselt zwischen Saisons | Zuordnung über `resultTypeID` statt über die Reihenfolge, per Test abgesichert |
 | Torlisten der Quelle sind lückenhaft: 183 erfasste Tore für den MSV bei 203 laut Endergebnis, bei 101 der 183 fehlt die Minute | Bleiben `NULL`; Abgleich Torliste vs. Endergebnis in Check 6. Das Dashboard zeigt Torminuten nur für Tore mit Minute und weist die übrigen in einer eigenen Karte aus |
 | In der Liga-Datei der Saison 2024 kommt der MSV nicht vor, weil er 2024/25 in der Regionalliga West spielte | Saison wird geladen, taucht in MSV-Auswertungen nicht auf; das Dashboard weist darauf hin |
-| Bei manchen Toren fehlen Torschütze und Minute | Bleiben `NULL`; Abgleich Torliste vs. Endergebnis in Check 6 |
-| In der Liga-Datei der Saison 2024 kommt der MSV nicht vor | Saison wird geladen, taucht in MSV-Auswertungen nicht auf |
-| Torlisten unvollständig, bei vielen Toren fehlt die Minute | Auswertung der Torminuten nur für Tore mit bekannter Minute; die Karte „Tore ohne Minute“ zeigt den Anteil |
+
+## Dashboard
+
+Das Power-BI-Dashboard hat vier Seiten (Import-Modus, Weiß-Blau-Design mit eigenem Theme):
+
+![Saisonübersicht](dashboard/01-saisonuebersicht.png)
+![Heim und Auswärts](dashboard/02-heim-auswaerts.png)
+![Form](dashboard/03-form.png)
+![Tore und Torminuten](dashboard/04-tore.png)
+
+Die `.pbix`-Datei und das Farbschema (`msv-theme.json`) liegen in [`dashboard/`](dashboard/), PDF-Exporte je Saison in [`dashboard/pdf-exports/`](dashboard/pdf-exports/). Zum Öffnen wird Power BI Desktop benötigt, die Verbindung zeigt auf `localhost,1433` / `msv_dwh`.
 
 ## Ergebnisse
 
-_TODO: Hier 3 bis 4 konkrete Erkenntnisse aus den Daten eintragen (z. B. Heim- vs. Auswärtspunkte je Saison), sobald das Dashboard steht. Screenshots liegen in [`dashboard/`](dashboard/)._
+- **Heim stärker als auswärts:** Über alle Saisons mit Daten holt der MSV zu Hause 1,75 Punkte pro Spiel (121 Punkte in 69 Spielen), auswärts 1,00 (68 in 68). Zu Saison 2022/23 und zur laufenden Saison 2026/27 liegen unvollständige Daten vor.
+- **Saison 2025/26:** Platz 4 mit 68 Punkten, 12 Punkte hinter Meister VfL Osnabrück (80).
+- **Form:** Nach dem Saisonstart mit 15 von 15 möglichen Punkten in fünf Spielen fiel die Form im Herbst 2025 deutlich ab.
+- **Tore nach Minuten:** Bei den Toren mit bekannter Minute fallen die meisten Gegentore spät (76. bis 90. Minute, 20 Gegentore über alle Saisons). Die Aussage gilt nur für einen Teil der Tore, denn bei 101 von 183 geschossenen Toren fehlt die Minute in der Quelle.
 
-**Validierung:** _TODO: Tabelle 2025/26 aus Check 7 mit einer öffentlichen Tabelle abgleichen und das Ergebnis hier festhalten._
+**Validierung:** Die Tabelle der laufenden Saison 2026/27 nach dem 10. Spieltag (Top 10) wurde mit einer öffentlichen Tabelle abgeglichen und stimmt exakt überein (Platzierung, Punkte, Tore).
 
 ## Tests
 
+Die Tests prüfen die Transformationslogik (`src/transform.py`) und brauchen weder Datenbank noch Internet. Mit aktiver virtueller Umgebung im Projektordner:
+
 ```bash
 pip install pytest
-pytest
+pytest -v
 ```
+
+Erwartet werden 8 bestandene Tests, u. a. zur Ergebnis-Zuordnung über `resultTypeID`, zu unbekannten Torschützen, gemischten Zeitstempel-Formaten und Duplikaten.
 
 ## Fehlerbehebung
 
