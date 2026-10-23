@@ -132,7 +132,8 @@ Beim Aufbau sind folgende Auffälligkeiten aufgetreten. Die Pipeline behandelt s
 | Saison 2022 enthält nur 211 statt 380 Spielen (davon 210 gültig) | `season_status = 'unvollständig'` in `dim_season` |
 | Die Quelle liefert keine Zuschauerzahlen (`numberOfViewers` durchgehend leer) | Keine Zuschauer-Auswertung; Spalte bleibt im Staging für spätere Quellen |
 | Reihenfolge von Halbzeit- und Endergebnis wechselt zwischen Saisons | Zuordnung über `resultTypeID` statt über die Reihenfolge, per Test abgesichert |
-| Zeitstempel mal mit, mal ohne Millisekunden | Parsing als ISO 8601, per Test abgesichert |
+| Torlisten der Quelle sind lückenhaft: 183 erfasste Tore für den MSV bei 203 laut Endergebnis, bei 101 der 183 fehlt die Minute | Bleiben `NULL`; Abgleich Torliste vs. Endergebnis in Check 6. Das Dashboard zeigt Torminuten nur für Tore mit Minute und weist die übrigen in einer eigenen Karte aus |
+| Die Reihenfolge der Ergebnisse (`resultOrderID`) ist je Saison verschieden: ältere Saisons liefern das Endergebnis zuerst, neuere die Halbzeit | Zuordnung über `resultTypeID` statt `resultOrderID`, per Test abgesichert |
 | Bei manchen Toren fehlen Torschütze und Minute | Bleiben `NULL`; Abgleich Torliste vs. Endergebnis in Check 6 |
 | In der Liga-Datei der Saison 2024 kommt der MSV nicht vor | Saison wird geladen, taucht in MSV-Auswertungen nicht auf |
 | Torlisten unvollständig, bei vielen Toren fehlt die Minute | Auswertung der Torminuten nur für Tore mit bekannter Minute; die Karte „Tore ohne Minute“ zeigt den Anteil |
