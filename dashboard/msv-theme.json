@@ -1,0 +1,33 @@
+{
+  "name": "MSV Weiss-Blau",
+  "dataColors": ["#0B3C8C", "#4DA3FF", "#F2A900", "#6B7A90", "#1E88A8", "#A3B8D6", "#082B66", "#7FC0FF"],
+  "background": "#FFFFFF",
+  "foreground": "#0B2A5B",
+  "tableAccent": "#0B3C8C",
+  "good": "#2E9E5B",
+  "neutral": "#F2A900",
+  "bad": "#D64545",
+  "maximum": "#0B3C8C",
+  "center": "#A3B8D6",
+  "minimum": "#EAF1FB",
+  "textClasses": {
+    "callout": { "fontSize": 40, "fontFace": "Segoe UI Semibold", "color": "#0B3C8C" },
+    "title": { "fontSize": 18, "fontFace": "Segoe UI Semibold", "color": "#0B3C8C" },
+    "header": { "fontSize": 14, "fontFace": "Segoe UI Semibold", "color": "#0B3C8C" },
+    "label": { "fontSize": 14, "fontFace": "Segoe UI", "color": "#0B2A5B" }
+  },
+  "visualStyles": {
+    "page": {
+      "*": {
+        "background": [{ "color": { "solid": { "color": "#EEF3FA" } }, "transparency": 0 }]
+      }
+    },
+    "*": {
+      "*": {
+        "title": [{ "show": true, "fontColor": { "solid": { "color": "#0B3C8C" } }, "fontSize": 18 }],
+        "background": [{ "show": true, "color": { "solid": { "color": "#FFFFFF" } }, "transparency": 0 }],
+        "border": [{ "show": true, "color": { "solid": { "color": "#D5DEEC" } }, "radius": 6 }]
+      }
+    }
+  }
+}

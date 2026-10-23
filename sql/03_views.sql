@@ -51,3 +51,33 @@ FROM dwh.fact_team_match AS f
 WHERE f.is_finished = 1
   AND f.points IS NOT NULL;
 GO
+-- Tabellenplatz nach jedem Spieltag (kumulierte Punkte je Team und Saison, danach RANK)
+-- Hinweis: Spieltag = matchday der Quelle. Verlegte Spiele zaehlen zu ihrem urspruenglichen Spieltag.
+CREATE OR ALTER VIEW dwh.v_rank_by_matchday AS
+WITH cum AS (
+    SELECT f.season_key,
+           f.team_key,
+           f.matchday,
+           SUM(CAST(f.points AS INT))
+               OVER (PARTITION BY f.season_key, f.team_key
+                     ORDER BY f.matchday ROWS UNBOUNDED PRECEDING) AS points_cum,
+           SUM(CAST(f.goals_for AS INT) - CAST(f.goals_against AS INT))
+               OVER (PARTITION BY f.season_key, f.team_key
+                     ORDER BY f.matchday ROWS UNBOUNDED PRECEDING) AS goal_diff_cum,
+           SUM(CAST(f.goals_for AS INT))
+               OVER (PARTITION BY f.season_key, f.team_key
+                     ORDER BY f.matchday ROWS UNBOUNDED PRECEDING) AS goals_for_cum
+    FROM dwh.fact_team_match AS f
+    WHERE f.is_finished = 1
+      AND f.points IS NOT NULL
+)
+SELECT season_key,
+       team_key,
+       matchday,
+       points_cum,
+       goal_diff_cum,
+       goals_for_cum,
+       RANK() OVER (PARTITION BY season_key, matchday
+                    ORDER BY points_cum DESC, goal_diff_cum DESC, goals_for_cum DESC) AS table_rank
+FROM cum;
+GO

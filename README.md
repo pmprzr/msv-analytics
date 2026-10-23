@@ -115,7 +115,7 @@ msv-analytics/
 │   ├── 00_create_database.sql   Datenbank anlegen
 │   ├── 01_create_tables.sql     Schemata, Staging-Tabellen, Sternschema
 │   ├── 02_load_dwh.sql          alle Ladeprozeduren (stg -> dwh)
-│   ├── 03_views.sql             Tabelle und Form (Window Functions)
+│   ├── 03_views.sql             Tabelle, Form und Tabellenplatz je Spieltag (Window Functions)
 │   └── 04_checks.sql            Datenqualität und Abstimmung
 ├── tests/                    pytest für die Transformationslogik
 ├── dashboard/                Power-BI-Datei und Screenshots
